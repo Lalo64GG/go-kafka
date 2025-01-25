@@ -1,24 +1,30 @@
-# Imagen base de Go
-FROM golang:1.23.2-alpine
+# Usa la imagen base de Go con Ubuntu
+FROM golang:1.23.2
 
-# Crea y configura el directorio de trabajo
-WORKDIR /app
+# Instala gcc y las herramientas necesarias para Cgo
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libssl-dev \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copia el archivo go.mod y go.sum, y descarga las dependencias
-COPY go.mod go.sum ./
-RUN go mod download
+# Establece la variable de entorno para habilitar CGO
+ENV CGO_ENABLED=1
 
-# Copia el resto del código
+# Establece el directorio de trabajo
+WORKDIR /go/src/myapp
+
+# Copia el código fuente al contenedor
 COPY . .
 
-# Asegúrate de limpiar y descargar dependencias
+# Descarga las dependencias del proyecto
 RUN go mod tidy
 
-# Compila la aplicación
-RUN go build -o app .
+# Compila la aplicación Go
+RUN go build -o /go-app
 
-# Expone el puerto de tu API
+# Expone el puerto
 EXPOSE 8080
 
-# Comando para ejecutar la aplicación
-CMD ["./app"]
+# Comando por defecto para ejecutar la aplicación
+CMD ["/go-app"]

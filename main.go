@@ -13,8 +13,8 @@ import (
 func main() {
 
 	//* Ejecutar producer y consumer en goroutines
-	src.Producer()
-	src.Consumer()
+	go src.Producer()
+	go src.Consumer()
 
 	//* Manejar señales del sistema para detener el programa
 
