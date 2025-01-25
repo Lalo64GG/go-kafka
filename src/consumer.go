@@ -10,7 +10,7 @@ import (
 func Consumer() {
 	// Crear un nuevo consumidor
 	c, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers": "98.83.151.5:9092",
+		"bootstrap.servers": "KAFKA_BROKER",
 		"group.id":          "myGroup",
 		"auto.offset.reset": "earliest",
 	})
