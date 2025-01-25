@@ -5,13 +5,16 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+
+
+	"github.com/lalo64/go-kafka/src"
 )
 
 func main() {
 
 	//* Ejecutar producer y consumer en goroutines
-	go producer()
-	go consumer()
+	src.Producer()
+	src.Consumer()
 
 	//* Manejar señales del sistema para detener el programa
 
