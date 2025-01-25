@@ -9,7 +9,7 @@ import (
 func Producer() {
 	// Crear un nuevo productor
 	p, err := kafka.NewProducer(&kafka.ConfigMap{
-		"bootstrap.servers": "kafka:9092",
+		"bootstrap.servers": "98.83.151.5:9092",
 	})
 
 	if err != nil {
