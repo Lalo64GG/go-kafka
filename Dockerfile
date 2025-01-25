@@ -11,6 +11,9 @@ RUN go mod download
 # Copia el resto del código
 COPY . .
 
+# Asegúrate de limpiar y descargar dependencias
+RUN go mod tidy
+
 # Compila la aplicación
 RUN go build -o app .
 
