@@ -8,6 +8,8 @@ services:
       - "2181:2181"
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
+    volumes:
+      - zookeeper_data:/bitnami/zookeeper
 
   kafka:
     image: bitnami/kafka:latest
@@ -21,6 +23,8 @@ services:
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
     depends_on:
       - zookeeper
+    volumes:
+      - kafka_data:/bitnami/kafka
 
   api:
     build:
@@ -29,9 +33,35 @@ services:
       - "8080:8080"
     depends_on:
       - kafka
+      - db
     environment:
       KAFKA_BROKER: kafka:9092  # Kafka dentro de Docker
       KAFKA_BROKER_EXTERNAL: 98.83.151.5:9092  # Kafka fuera de Docker, conecta usando la IP de la instancia AWS
+      DB_HOST: db:3306  # Conexión a la base de datos dentro de Docker
+      DB_USER: root
+      DB_PASSWORD: root_password
+      DB_NAME: myapp
+    networks:
+      - mynetwork
+
+  db:
+    image: mysql:latest
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: myapp
+    ports:
+      - "3306:3306"
+    networks:
+      - mynetwork
+    volumes:
+      - mysql_data:/var/lib/mysql
+
 volumes:
-  - ./kafka_data:/var/lib/kafka/data
-  - ./zookeeper_data:/var/lib/zookeeper/data
+  kafka_data:
+  zookeeper_data:
+  mysql_data:
+
+networks:
+  mynetwork:
+    driver: bridge
