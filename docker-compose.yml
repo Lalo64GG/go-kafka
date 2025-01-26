@@ -20,7 +20,7 @@ services:
       - KAFKA_BROKER_ID=1
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://54.235.169.219:9092
     depends_on:
       - zookeeper
     volumes:
@@ -36,7 +36,7 @@ services:
       - db
     environment:
       KAFKA_BROKER: kafka:9092  # Kafka dentro de Docker
-      KAFKA_BROKER_EXTERNAL: 98.83.151.5:9092  # Kafka fuera de Docker, conecta usando la IP de la instancia AWS
+      KAFKA_BROKER_EXTERNAL: 54.235.169.219:9092  # Kafka fuera de Docker, conecta usando la IP de la instancia AWS
       DB_HOST: db:3306  # Conexión a la base de datos dentro de Docker
       DB_USER: root
       DB_PASSWORD: root_password
