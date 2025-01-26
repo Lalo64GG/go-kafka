@@ -1,4 +1,4 @@
-package src
+package infraestructure
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 func Consumer() {
 	// Crear un nuevo consumidor
 	c, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers": "KAFKA_BROKER",
+		"bootstrap.servers": "34.207.197.203:9092",
 		"group.id":          "myGroup",
 		"auto.offset.reset": "earliest",
 	})

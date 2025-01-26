@@ -2,26 +2,38 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"os/signal"
-	"syscall"
 
+	"github.com/lalo64/go-kafka/src/infraestructure"
+	"github.com/lalo64/go-kafka/src/server"
+)
 
-	"github.com/lalo64/go-kafka/src"
+const (
+	HOST = "localhost"
+	PORT ="8080"
 )
 
 func main() {
 
-	//* Ejecutar producer y consumer en goroutines
-	go src.Producer()
-	go src.Consumer()
+	go infraestructure.Consumer()
 
-	//* Manejar señales del sistema para detener el programa
+	srv := server.NewServer(HOST, PORT);
 
-	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-	<-sigs
+	if err := srv.Run(); err != nil {
+		fmt.Println("Error al iniciar el servidor:", err)
+	}
 
-	fmt.Println("Shutting downs gracefully....")
+
+
+	// //* Ejecutar producer y consumer en goroutines
+	// go src.Producer()
+	// go src.Consumer()
+
+	// //* Manejar señales del sistema para detener el programa
+
+	// sigs := make(chan os.Signal, 1)
+	// signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	// <-sigs
+
+	// fmt.Println("Shutting downs gracefully....")
 
 }

@@ -1,4 +1,4 @@
-package src
+package infraestructure
 
 import (
 	"fmt"
@@ -6,10 +6,10 @@ import (
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 )
 
-func Producer() {
+func Producer(message string) error {
 	// Crear un nuevo productor
 	p, err := kafka.NewProducer(&kafka.ConfigMap{
-		"bootstrap.servers": "KAFKA_BROKER",
+		"bootstrap.servers": "34.207.197.203:9092",
 	})
 
 	if err != nil {
@@ -33,13 +33,20 @@ func Producer() {
 
 	// Enviar mensajes al tópico
 	topic := "myTopic"
-	for _, word := range []string{"Welcome", "to", "Kafka", "with", "Golang"} {
-		p.Produce(&kafka.Message{
-			TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
-			Value:          []byte(word),
-		}, nil)
+
+	err = p.Produce(&kafka.Message{TopicPartition: kafka.TopicPartition{
+		Topic:     &topic,
+		Partition: kafka.PartitionAny},
+		Value: []byte(message)},
+		nil,
+	)
+
+	if err != nil {
+		fmt.Printf("Error al enviar mensaje: %v\n", err)
 	}
 
 	// Asegurarse de que los mensajes se envíen antes de finalizar
 	p.Flush(15 * 1000)
+
+	return nil
 }
